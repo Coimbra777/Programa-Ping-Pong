@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+  <title>Jogo Ping-Pong</title>
+</head>
+
+<body>
+  <canvas></canvas>
+  <script>
+    // const canvasEl = document.querySelector('canvas')
+    // const canvasCtx = canvasEl.getContext('2d')
+    const canvasEl = document.querySelector('canvas'), canvasCtx = canvasEl.getContext('2d')
+    const larguraLinha = 15
+
+    const field = {
+      w: window.innerWidth,
+      h: window.innerHeight,
+      draw: function () {
+        canvasCtx.fillStyle = "#286047"
+        canvasCtx.fillRect(0, 0, this.w, this.h)
+      }
+    }
+
+    function setup() {
+      // canvasEl.width = window.innerWidth
+      // canvasEl.height = window.innerHeight
+      // canvasCtx.width = window.innerWidth
+      // canvasCtx.height = window.innerHeight
+      canvasEl.width = canvasCtx.width = window.innerWidth
+      canvasEl.height = canvasCtx.height = window.innerHeight
+    }
+
+    function draw() {
+      field.draw()
+      // DESENHA LINHA CENTRAL
+      // const larguraLinha = 15
+      // const x = window.innerWidth / 2 - larguraLinha / 2
+      // const y = 0
+      // const w = larguraLinha
+      // const h = window.innerHeight
+      // CODIGO REFATORADO
+      canvasCtx.fillStyle = '#fff'
+      canvasCtx.fillRect(
+        window.innerWidth / 2 - larguraLinha / 2,
+        0,
+        larguraLinha,
+        window.innerHeight
+      )
+
+      // DESENHA A RAQUETE ESQUERDA
+      canvasCtx.fillRect(10, 250, larguraLinha, 100)
+
+      // DESENHA A RAQUETE DIREITA
+      canvasCtx.fillRect(window.innerWidth - larguraLinha - 10, 100, larguraLinha, 200)
+
+      // DESENHA A BOLINHA
+      canvasCtx.beginPath()
+      canvasCtx.arc(500, 300, 20, 2 * Math.PI, false)
+      canvasCtx.fill()
+
+      // DESENHA O PLACAR
+      canvasCtx.font = 'bold 64px Arial'
+      canvasCtx.textAlign = 'center'
+      canvasCtx.textBaseline = 'top'
+      canvasCtx.fillStyle = '#01341D'
+
+      canvasCtx.fillText('3', window.innerWidth / 4, 50)
+      canvasCtx.fillText('1',
+        window.innerWidth / 4 + window.innerWidth / 2,
+        50)
+    }
+
+    setup()
+    draw()
+
+  </script>
+
+</body>
+
+</html>
