@@ -20,15 +20,80 @@
   <script>
     // const canvasEl = document.querySelector('canvas')
     // const canvasCtx = canvasEl.getContext('2d')
-    const canvasEl = document.querySelector('canvas'), canvasCtx = canvasEl.getContext('2d')
-    const larguraLinha = 15
+    const canvasEl = document.querySelector('canvas'), canvasCtx = canvasEl.getContext('2d'),
+      gapX = 10
 
+    const larguraLinha = 15
+    // DESENHA O CAMPO
     const field = {
       w: window.innerWidth,
       h: window.innerHeight,
       draw: function () {
         canvasCtx.fillStyle = "#286047"
         canvasCtx.fillRect(0, 0, this.w, this.h)
+      }
+    }
+    // DESENHA A LINHA CENTRAL
+    const line = {
+      w: 15,
+      h: field.h,
+      draw: function () {
+        canvasCtx.fillStyle = '#fff'
+        canvasCtx.fillRect(
+          field.w / 2 - this.w / 2,
+          0,
+          this.w,
+          this.h
+        )
+      }
+    }
+    // DESENHA A RAQUETE ESQUERDA
+    const leftpaddle = {
+      x: gapX,
+      y: 250,
+      w: line.w,
+      h: 200,
+      draw: function () {
+        canvasCtx.fillStyle = '#fff'
+        canvasCtx.fillRect(this.x, this.y, this.w, this.h)
+      }
+    }
+    // DESENHA A RAQUETE DIREITA
+    const rightPaddle = {
+      x: field.w - line.w - gapX,
+      y: 100,
+      w: line.w,
+      h: 200,
+      draw: function () {
+        canvasCtx.fillStyle = '#fff'
+        canvasCtx.fillRect(this.x, this.y, this.w, this.h)
+      }
+    }
+    // DESENHA A PLACAR
+    const score = {
+      human: 1,
+      computer: 2,
+      draw: function () {
+        canvasCtx.font = 'bold 64px Arial'
+        canvasCtx.textAlign = 'center'
+        canvasCtx.textBaseline = 'top'
+        canvasCtx.fillStyle = '#01341D'
+        canvasCtx.fillText(this.human, field.w / 4, 50)
+        canvasCtx.fillText(this.computer,
+          field.w / 4 + field.w / 2,
+          50)
+      }
+    }
+    // DESENHA A BOLA
+    const ball = {
+      x: 370,
+      y: 100,
+      r: 20,
+      draw: function () {
+        canvasCtx.fillStyle = '#fff'
+        canvasCtx.beginPath()
+        canvasCtx.arc(this.x, this.y, this.r, 2 * Math.PI, false)
+        canvasCtx.fill()
       }
     }
 
@@ -43,42 +108,11 @@
 
     function draw() {
       field.draw()
-      // DESENHA LINHA CENTRAL
-      // const larguraLinha = 15
-      // const x = window.innerWidth / 2 - larguraLinha / 2
-      // const y = 0
-      // const w = larguraLinha
-      // const h = window.innerHeight
-      // CODIGO REFATORADO
-      canvasCtx.fillStyle = '#fff'
-      canvasCtx.fillRect(
-        window.innerWidth / 2 - larguraLinha / 2,
-        0,
-        larguraLinha,
-        window.innerHeight
-      )
-
-      // DESENHA A RAQUETE ESQUERDA
-      canvasCtx.fillRect(10, 250, larguraLinha, 100)
-
-      // DESENHA A RAQUETE DIREITA
-      canvasCtx.fillRect(window.innerWidth - larguraLinha - 10, 100, larguraLinha, 200)
-
-      // DESENHA A BOLINHA
-      canvasCtx.beginPath()
-      canvasCtx.arc(500, 300, 20, 2 * Math.PI, false)
-      canvasCtx.fill()
-
-      // DESENHA O PLACAR
-      canvasCtx.font = 'bold 64px Arial'
-      canvasCtx.textAlign = 'center'
-      canvasCtx.textBaseline = 'top'
-      canvasCtx.fillStyle = '#01341D'
-
-      canvasCtx.fillText('3', window.innerWidth / 4, 50)
-      canvasCtx.fillText('1',
-        window.innerWidth / 4 + window.innerWidth / 2,
-        50)
+      line.draw()
+      leftpaddle.draw()
+      rightPaddle.draw()
+      score.draw()
+      ball.draw()
     }
 
     setup()
