@@ -52,7 +52,7 @@
     // DESENHA A RAQUETE ESQUERDA
     const leftpaddle = {
       x: gapX,
-      y: 250,
+      y: 100,
       w: line.w,
       h: 200,
       _move: function () {
@@ -61,7 +61,6 @@
       draw: function () {
         canvasCtx.fillStyle = '#fff'
         canvasCtx.fillRect(this.x, this.y, this.w, this.h)
-
         this._move()
       }
     }
@@ -71,13 +70,21 @@
       y: 100,
       w: line.w,
       h: 200,
+      speed: 5,
       _move: function () {
-        this.y = ball.y
+        if (this.y + this.h / 2 < ball.y + ball.r) {
+          this.y += this.speed
+        } else {
+          this.y -= this.speed
+        }
+        // this.y = ball.y
+      },
+      speedUp: function () {
+        this.speed += 2
       },
       draw: function () {
         canvasCtx.fillStyle = '#fff'
         canvasCtx.fillRect(this.x, this.y, this.w, this.h)
-
         this._move()
       }
     }
@@ -104,8 +111,8 @@
     }
     // DESENHA A BOLA
     const ball = {
-      x: 0,
-      y: 0,
+      x: this.x = field.w / 2,
+      y: this.y = field.h / 2,
       r: 20,
       speed: 5,
 
@@ -113,21 +120,7 @@
       directionY: 1,
 
       _calcPosition: function () {
-
-        // verifica se o jogador fez 1 ponto 
-        if (this.x < this.r + leftpaddle.w + gapX) {
-          if (
-            // verifica se raquete esta na posição y da bola
-            this.y + this.r > leftpaddle.y &&
-            this.y - this.r < leftpaddle.y + leftpaddle.h) {
-            this._reverseX()
-          } else {
-            score.increseComputer()
-            this._pointUp()
-          }
-        }
-
-        // verifica se o jogador fez 1 ponto 
+        // verifica se o jogador 01 fez um ponto 
         if (this.x > field.w - this.r - rightPaddle.w - gapX) {
           // verifica se raquete esta na posição y da bola
           if (
@@ -141,7 +134,18 @@
             this._pointUp()
           }
         }
-
+        // verifica se o jogador 02 fez um ponto 
+        if (this.x < this.r + leftpaddle.w + gapX) {
+          if (
+            // verifica se raquete esta na posição y da bola
+            this.y + this.r > leftpaddle.y &&
+            this.y - this.r < leftpaddle.y + leftpaddle.h) {
+            this._reverseX()
+          } else {
+            score.increseComputer()
+            this._pointUp()
+          }
+        }
 
 
         if (
@@ -158,25 +162,28 @@
       _reverseY: function () {
         this.directionY *= -1
       },
+      // incrementa a velocidade da bolinha
+      _speedUp: function () {
+        this.speed += 3
+        rightPaddle.speedUp()
+      },
+      // volta a bola para a Posição inicial
+      _pointUp: function () {
+        this._speedUp()
+        this.x = field.w / 2
+        this.y = field.h / 2
+      },
 
       _move: function () {
         this.x += this.directionX * this.speed
         this.y += this.directionY * this.speed
       },
 
-      // volta a bola para a Posição inicial
-      _pointUp: function () {
-        this.x = field.w / 2
-        this.y = field.h / 2
-      },
-
-
       draw: function () {
         canvasCtx.fillStyle = '#fff'
         canvasCtx.beginPath()
         canvasCtx.arc(this.x, this.y, this.r, 2 * Math.PI, false)
         canvasCtx.fill()
-
         this._calcPosition()
         this._move()
       }
@@ -222,15 +229,11 @@
     canvasEl.addEventListener('mousemove', function (e) {
       mouse.x = e.pageX
       mouse.y = e.pageY
-
-      console.log(mouse)
+      // console.log(mouse)
     })
-
     setup()
     main()
     draw()
-
-
 
   </script>
 </body>
